@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "multi-arena"
+  },
+  "targets": {
+    "multi-arena": {
+      "hosting": {
+        "site-webview": [
+          "app-multi-arena"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

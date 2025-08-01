@@ -18,6 +18,10 @@ import {
   EyeOff
 } from 'lucide-react';
 
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../lib/firebase';
+import Image from 'next/image';
+
 
 export default function MobileApp() {
 
@@ -25,20 +29,21 @@ export default function MobileApp() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loginData, setLoginData] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
-  const [userData, setUserData] = useState({
-    name: 'João Silva',
-    email: 'joao.silva@email.com',
-    phone: '(11) 99999-9999',
-    birthDate: '15/03/1990',
-    address: 'São Paulo, SP',
-    memberSince: '2023'
-  });
 
-  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (loginData.email && loginData.password) {
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        loginData.email,
+        loginData.password
+      );
+      const user = userCredential.user;
       setIsLoggedIn(true);
-      setCurrentScreen('home');
+      setCurrentScreen("home");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      alert("Erro ao fazer login: " + error.message);
     }
   };
 
@@ -61,8 +66,8 @@ export default function MobileApp() {
       <div className="w-full max-w-sm">
         <div className="bg-white rounded-3xl shadow-2xs p-8">
           <div className="text-center mb-8">
-            <div className="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-              <User className="w-10 h-10 text-white" />
+            <div className="flex items-center justify-center mx-auto mb-4">
+              <Image src="/img/logo.png" alt="Logo da empresa" width={120} height={120} />
             </div>
             <h1 className="text-2xl font-bold text-gray-800">Bem-vindo</h1>
             <p className="text-gray-600 mt-2">Entre com sua conta</p>
@@ -122,7 +127,7 @@ export default function MobileApp() {
     <div className="min-h-screen bg-gray-50">
       <div className="bg-[url('/img/bgBasic.png')] bg-cover bg-center text-white p-6 pb-8">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Olá, {userData.name.split(' ')[0]}!</h1>
+          <h1 className="text-2xl font-bold">Olá</h1>
           <div className="w-10 h-10 bg-white/60 rounded-full flex items-center justify-center">
             <User className="w-6 h-6" />
           </div>
@@ -177,8 +182,8 @@ export default function MobileApp() {
                 <User className="w-8 h-8 text-white" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-gray-800">{userData.name}</h2>
-                <p className="text-gray-600">Membro desde {userData.memberSince}</p>
+                <h2 className="text-xl font-bold text-gray-800"></h2>
+                <p className="text-gray-600">Membro desde</p>
               </div>
             </div>
             <Edit className="w-5 h-5 text-gray-400" />
@@ -193,7 +198,7 @@ export default function MobileApp() {
               <Mail className="w-5 h-5 text-gray-500" />
               <div className="flex-1">
                 <p className="text-sm text-gray-600">Email</p>
-                <p className="font-medium text-gray-800">{userData.email}</p>
+                <p className="font-medium text-gray-800"></p>
               </div>
             </div>
 
@@ -201,7 +206,7 @@ export default function MobileApp() {
               <Phone className="w-5 h-5 text-gray-500" />
               <div className="flex-1">
                 <p className="text-sm text-gray-600">Telefone</p>
-                <p className="font-medium text-gray-800">{userData.phone}</p>
+                <p className="font-medium text-gray-800"></p>
               </div>
             </div>
 
@@ -209,7 +214,7 @@ export default function MobileApp() {
               <Calendar className="w-5 h-5 text-gray-500" />
               <div className="flex-1">
                 <p className="text-sm text-gray-600">Data de Nascimento</p>
-                <p className="font-medium text-gray-800">{userData.birthDate}</p>
+                <p className="font-medium text-gray-800"></p>
               </div>
             </div>
 
@@ -217,7 +222,7 @@ export default function MobileApp() {
               <MapPin className="w-5 h-5 text-gray-500" />
               <div className="flex-1">
                 <p className="text-sm text-gray-600">Localização</p>
-                <p className="font-medium text-gray-800">{userData.address}</p>
+                <p className="font-medium text-gray-800"></p>
               </div>
             </div>
           </div>
@@ -283,8 +288,8 @@ export default function MobileApp() {
               key={item.id}
               onClick={() => setCurrentScreen(item.id)}
               className={`flex flex-col items-center py-2 px-3 rounded-xl transition-all ${isActive
-                  ? 'text-blue-600 bg-blue-50'
-                  : 'text-gray-500 hover:text-gray-700'
+                ? 'text-blue-600 bg-blue-50'
+                : 'text-gray-500 hover:text-gray-700'
                 }`}
             >
               <IconComponent className={`w-6 h-6 mb-1 ${isActive ? 'text-blue-600' : ''}`} />
