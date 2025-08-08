@@ -6,9 +6,9 @@ import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import HomeScreen from "./HomeScreen";
 import AccountScreen from "./AccountScreen";
-import Esportes from './esportes';
-import Desafios from './desafios';
-import Configuracoes from './Config';
+import Esportes from "./Esportes";
+import Desafios from "./Desafios";
+import Configuracoes from "./Config";
 import BottomMenu from "./BottomMenu";
 
 export default function MobileApp() {
@@ -25,24 +25,31 @@ export default function MobileApp() {
   });
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
-      const { signInWithEmailAndPassword } = await import("firebase/auth");
-      const { auth } = await import("../../../lib/firebase");
+  // Login com verificação de email
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement> | null) => {
+  if (e) e.preventDefault();
 
-      await signInWithEmailAndPassword(auth, loginData.email, loginData.password);
-      setIsLoggedIn(true);
-      setActiveScreen("home");
-    } catch (error: any) {
-      alert("Erro ao fazer login: " + error.message);
-    }
-  };
+  try {
+    const { signInWithEmailAndPassword } = await import("firebase/auth");
+    const { auth } = await import("../../../lib/firebase");
 
+    await signInWithEmailAndPassword(auth, loginData.email, loginData.password);
+    setIsLoggedIn(true);
+    setActiveScreen("home");
+  } catch (error: any) {
+    alert("Erro ao fazer login: " + error.message);
+  }
+};
+
+  // Registro com envio de email de verificação
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const { createUserWithEmailAndPassword, updateProfile } = await import("firebase/auth");
+      const {
+        createUserWithEmailAndPassword,
+        updateProfile,
+        sendEmailVerification,
+      } = await import("firebase/auth");
       const { auth } = await import("../../../lib/firebase");
 
       const userCredential = await createUserWithEmailAndPassword(
@@ -55,7 +62,9 @@ export default function MobileApp() {
         displayName: `${registerData.firstName} ${registerData.lastName}`,
       });
 
-      alert("Registro realizado com sucesso!");
+      await sendEmailVerification(userCredential.user);
+
+      alert("Registro realizado com sucesso! Verifique seu e-mail para confirmar a conta.");
       setIsRegistering(false);
       setLoginData({ email: registerData.email, password: registerData.password });
     } catch (error: any) {
@@ -63,6 +72,7 @@ export default function MobileApp() {
     }
   };
 
+  // Logout
   const handleLogout = async () => {
     try {
       const { signOut } = await import("firebase/auth");
@@ -78,6 +88,7 @@ export default function MobileApp() {
     }
   };
 
+  // Renderiza a tela correta
   const renderScreen = () => {
     if (!isLoggedIn) {
       return isRegistering ? (

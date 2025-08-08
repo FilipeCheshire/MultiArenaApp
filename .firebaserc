@@ -5,7 +5,7 @@
   "targets": {
     "multi-arena": {
       "hosting": {
-        "site-webview": [
+        "app-multi-arena": [
           "app-multi-arena"
         ]
       }

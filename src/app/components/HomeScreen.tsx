@@ -15,7 +15,6 @@ export default function HomeScreen() {
         </div>
         <p className="text-blue-100">Que bom te ver por aqui hoje</p>
       </div>
-
       <div className="p-6 -mt-4">
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
           <h2 className="text-xl font-bold text-gray-800 mb-4">Resumo do Dia</h2>

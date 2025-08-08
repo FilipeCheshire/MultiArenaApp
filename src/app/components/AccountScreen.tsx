@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { User, Mail, Phone, Calendar, MapPin, Edit } from 'lucide-react';
+import { User, Mail, Edit } from 'lucide-react';
 import { auth } from '../../../lib/firebase';
 
 interface AccountScreenProps {

@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "target": "site-webview",
+    "target": "app-multi-arena",
     "public": "out",
     "ignore": [
       "firebase.json",
